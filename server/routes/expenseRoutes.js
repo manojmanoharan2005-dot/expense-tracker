@@ -118,7 +118,11 @@ router.get('/export', protect, async (req, res) => {
 
         // Add expense rows
         expenses.forEach(expense => {
-            const date = new Date(expense.date).toLocaleDateString();
+            const dateObj = new Date(expense.date);
+            const year = dateObj.getFullYear();
+            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const day = String(dateObj.getDate()).padStart(2, '0');
+            const date = `${year}-${month}-${day}`;
             const title = `"${expense.title.replace(/"/g, '""')}"`;
             const category = `"${expense.category}"`;
             const amount = expense.amount;
