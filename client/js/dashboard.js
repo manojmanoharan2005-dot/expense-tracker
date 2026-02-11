@@ -550,10 +550,40 @@ document.getElementById('budget-form').addEventListener('submit', async (e) => {
     }
 });
 
-// Close modal when clicking outside
-document.getElementById('expense-modal').addEventListener('click', (e) => {
-    if (e.target.id === 'expense-modal') {
-        closeExpenseModal();
+// Export expenses to CSV
+async function exportToCSV() {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            showAlert('Session expired. Please login again.', 'danger');
+            return;
+        }
+
+        const response = await fetch(`${API_URL}/expenses/export`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Export failed');
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `trackify_expenses_${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        showAlert('Expenses exported successfully!', 'success');
+    } catch (error) {
+        console.error('Export error:', error);
+        showAlert('Failed to export expenses', 'danger');
     }
-});
+}
 

@@ -106,25 +106,34 @@ router.delete('/:id', protect, async (req, res) => {
     }
 });
 
-// @route   PUT /api/expenses/budget/update
-// @desc    Update user's monthly budget
+// @route   GET /api/expenses/export
+// @desc    Export expenses to CSV
 // @access  Private
-router.put('/budget/update', protect, async (req, res) => {
+router.get('/export', protect, async (req, res) => {
     try {
-        const { monthlyBudget } = req.body;
+        const expenses = await Expense.find({ user: req.user._id }).sort({ date: -1 });
 
-        if (monthlyBudget === undefined || monthlyBudget < 0) {
-            return res.status(400).json({ message: 'Please provide a valid budget amount' });
-        }
+        // Define CSV headers
+        let csv = 'Date,Title,Category,Amount,Notes\n';
 
-        const user = await User.findById(req.user._id);
-        user.monthlyBudget = monthlyBudget;
-        await user.save();
+        // Add expense rows
+        expenses.forEach(expense => {
+            const date = new Date(expense.date).toLocaleDateString();
+            const title = `"${expense.title.replace(/"/g, '""')}"`;
+            const category = `"${expense.category}"`;
+            const amount = expense.amount;
+            const notes = `"${(expense.notes || '').replace(/"/g, '""')}"`;
 
-        res.json({ monthlyBudget: user.monthlyBudget });
+            csv += `${date},${title},${category},${amount},${notes}\n`;
+        });
+
+        // Set headers for file download
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename=trackify_report.csv');
+        res.status(200).send(csv);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server error', error: error.message });
+        res.status(500).json({ message: 'Export failed', error: error.message });
     }
 });
 

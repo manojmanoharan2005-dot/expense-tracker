@@ -164,9 +164,14 @@
                         <h1 class="page-title">Expenses</h1>
                         <p class="page-subtitle">Manage and track all your expenses</p>
                     </div>
-                    <button class="btn btn-primary" onclick="openAddExpenseModal()">
-                        + Add Expense
-                    </button>
+                    <div class="flex gap-2">
+                        <button class="btn btn-secondary" onclick="exportToCSV()">
+                            📥 Export CSV
+                        </button>
+                        <button class="btn btn-primary" onclick="openAddExpenseModal()">
+                            + Add Expense
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Filters -->
