@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Trackify Dashboard - Manage Your Expenses">
+    <title>Dashboard - Trackify</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="logo">💰 Trackify</a>
+                <div class="user-info mt-3">
+                    <div class="user-avatar" id="user-avatar">U</div>
+                    <div class="user-details">
+                        <h3 id="user-name">User</h3>
+                        <p id="user-email">user@example.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active" onclick="showSection('overview')">📊 Overview</a></li>
+                <li><a href="#" onclick="showSection('expenses')">💸 Expenses</a></li>
+                <li><a href="#" onclick="showSection('budget')">💰 Budget</a></li>
+                <li><a href="#" onclick="showSection('goals')">🎯 Goals</a></li>
+                <li><a href="#" onclick="showSection('analytics')">📈 Analytics</a></li>
+            </ul>
+
+            <div style="margin-top: auto; padding-top: 2rem;">
+                <button class="theme-toggle" onclick="toggleTheme()" style="width: 100%; justify-content: center;">
+                    <span id="theme-icon">☀️</span>
+                    <span id="theme-text">Light Mode</span>
+                </button>
+                <button class="btn btn-danger mt-2" onclick="logout()" style="width: 100%;">
+                    Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Overview Section -->
+            <section id="overview-section" class="fade-in">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Overview</h1>
+                        <p class="page-subtitle">Manage your finances effectively.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openAddExpenseModal()">
+                        + Add Expense
+                    </button>
+                </div>
+
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon orange">📅</div>
+                        <div class="stat-label">Today's Expenses</div>
+                        <div class="stat-value" id="today-spent">₹0</div>
+                        <div class="stat-change">
+                            <span id="today-count">0 transactions</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon danger">💸</div>
+                        <div class="stat-label">This Month</div>
+                        <div class="stat-value" id="total-spent">₹0</div>
+                        <div class="stat-change" id="spent-change">
+                            <span>↑ 0%</span> vs last month
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon purple">💎</div>
+                        <div class="stat-label">Overall Total</div>
+                        <div class="stat-value" id="overall-total">₹0</div>
+                        <div class="stat-change">
+                            <span id="overall-count">All time</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon success">💰</div>
+                        <div class="stat-label">Monthly Budget</div>
+                        <div class="stat-value" id="monthly-budget">₹0</div>
+                        <div class="stat-change">
+                            <span id="budget-remaining">₹0 remaining</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon warning">📊</div>
+                        <div class="stat-label">Average Daily</div>
+                        <div class="stat-value" id="avg-daily">₹0</div>
+                        <div class="stat-change">
+                            <span id="daily-trend">This month</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon blue">📝</div>
+                        <div class="stat-label">Transactions</div>
+                        <div class="stat-value" id="total-transactions">0</div>
+                        <div class="stat-change">
+                            <span id="transaction-trend">This month</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Budget Alert -->
+                <div id="budget-alert" style="display: none;"></div>
+
+                <!-- Charts -->
+                <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+                    <div class="chart-container">
+                        <h3 class="mb-3">Spending by Category</h3>
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3 class="mb-3">Monthly Trend</h3>
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="card mt-4">
+                    <div class="card-header flex-between">
+                        <h3>Recent Transactions</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="showSection('expenses')">View All</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-transactions">
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No transactions yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Expenses Section -->
+            <section id="expenses-section" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Expenses</h1>
+                        <p class="page-subtitle">Manage and track all your expenses</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openAddExpenseModal()">
+                        + Add Expense
+                    </button>
+                </div>
+
+                <!-- Filters -->
+                <div class="card mb-3">
+                    <div class="flex gap-2">
+                        <select id="filter-category" class="form-control" onchange="filterExpenses()">
+                            <option value="">All Categories</option>
+                            <option value="Food">Food</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Bills">Bills</option>
+                            <option value="Health">Health</option>
+                            <option value="Education">Education</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <input type="month" id="filter-month" class="form-control" onchange="filterExpenses()">
+                    </div>
+                </div>
+
+                <!-- Expenses Table -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                                <th>Notes</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expenses-table">
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">No expenses found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Budget Section -->
+            <section id="budget-section" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Budget</h1>
+                        <p class="page-subtitle">Set and manage your monthly budget</p>
+                    </div>
+                </div>
+
+                <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="card">
+                        <h3 class="mb-3">Set Monthly Budget</h3>
+                        <form id="budget-form">
+                            <div class="form-group">
+                                <label for="budget-amount" class="form-label">Budget Amount (₹)</label>
+                                <input type="number" id="budget-amount" class="form-control" placeholder="Enter amount"
+                                    min="0" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Budget</button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="mb-3">Budget Overview</h3>
+                        <div class="stat-card" style="border: none; padding: 0;">
+                            <div class="stat-label">Current Budget</div>
+                            <div class="stat-value" id="current-budget">₹0</div>
+                            <div class="stat-label mt-2">Spent</div>
+                            <div class="stat-value text-danger" id="budget-spent">₹0</div>
+                            <div class="stat-label mt-2">Remaining</div>
+                            <div class="stat-value text-success" id="budget-left">₹0</div>
+                            <div class="mt-3">
+                                <div
+                                    style="background: var(--bg-tertiary); height: 20px; border-radius: var(--radius-lg); overflow: hidden;">
+                                    <div id="budget-progress"
+                                        style="height: 100%; background: var(--gradient-primary); width: 0%; transition: var(--transition);">
+                                    </div>
+                                </div>
+                                <p class="text-muted text-center mt-2" id="budget-percentage">0% used</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Goals Section -->
+            <section id="goals-section" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Savings Goals</h1>
+                        <p class="page-subtitle">Track and achieve your financial goals</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openAddGoalModal()">
+                        + Add Goal
+                    </button>
+                </div>
+
+                <!-- Goals Grid -->
+                <div id="goals-grid" class="stats-grid">
+                    <!-- Goals will be loaded here -->
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🎯</div>
+                        <p class="empty-state-text">No goals yet</p>
+                        <p class="text-muted">Start by creating your first savings goal!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section id="analytics-section" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Analytics</h1>
+                        <p class="page-subtitle">Detailed analysis of your spending patterns</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">This Month</div>
+                        <div class="stat-value" id="analytics-current">₹0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Last Month</div>
+                        <div class="stat-value" id="analytics-previous">₹0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Change</div>
+                        <div class="stat-value" id="analytics-change">0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Top Category</div>
+                        <div class="stat-value" id="analytics-top-category" style="font-size: 1.5rem;">-</div>
+                    </div>
+                </div>
+
+                <div class="chart-container mt-4">
+                    <h3 class="mb-3">Category Breakdown</h3>
+                    <canvas id="analyticsChart"></canvas>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Add/Edit Expense Modal -->
+    <div id="expense-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Add Expense</h3>
+                <button class="modal-close" onclick="closeExpenseModal()">&times;</button>
+            </div>
+            <form id="expense-form">
+                <input type="hidden" id="expense-id">
+                <div class="form-group">
+                    <label for="expense-title" class="form-label">Title</label>
+                    <input type="text" id="expense-title" class="form-control" placeholder="e.g., Grocery Shopping"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="expense-amount" class="form-label">Amount (₹)</label>
+                    <input type="number" id="expense-amount" class="form-control" placeholder="0" min="0" step="0.01"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="expense-category" class="form-label">Category</label>
+                    <select id="expense-category" class="form-control" required>
+                        <option value="">Select Category</option>
+                        <option value="Food">🍔 Food</option>
+                        <option value="Transport">🚗 Transport</option>
+                        <option value="Shopping">🛍️ Shopping</option>
+                        <option value="Entertainment">🎬 Entertainment</option>
+                        <option value="Bills">📄 Bills</option>
+                        <option value="Health">⚕️ Health</option>
+                        <option value="Education">📚 Education</option>
+                        <option value="Other">📦 Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="expense-date" class="form-label">Date</label>
+                    <input type="date" id="expense-date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="expense-notes" class="form-label">Notes (Optional)</label>
+                    <textarea id="expense-notes" class="form-control" rows="3"
+                        placeholder="Add any additional notes..."></textarea>
+                </div>
+                <div class="flex gap-2">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Save Expense</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeExpenseModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit Goal Modal -->
+    <div id="goal-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="goal-modal-title">Add Savings Goal</h3>
+                <button class="modal-close" onclick="closeGoalModal()">&times;</button>
+            </div>
+            <form id="goal-form">
+                <input type="hidden" id="goal-id">
+                <div class="form-group">
+                    <label for="goal-name" class="form-label">Goal Name</label>
+                    <input type="text" id="goal-name" class="form-control" placeholder="e.g., Emergency Fund" required>
+                </div>
+                <div class="form-group">
+                    <label for="goal-category" class="form-label">Category</label>
+                    <select id="goal-category" class="form-control" required>
+                        <option value="">Select Category</option>
+                        <option value="Emergency Fund">🚨 Emergency Fund</option>
+                        <option value="Vacation">✈️ Vacation</option>
+                        <option value="Education">📚 Education</option>
+                        <option value="Home">🏠 Home</option>
+                        <option value="Car">🚗 Car</option>
+                        <option value="Investment">📈 Investment</option>
+                        <option value="Other">📦 Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="goal-target" class="form-label">Target Amount (₹)</label>
+                    <input type="number" id="goal-target" class="form-control" placeholder="0" min="0" step="100"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="goal-current" class="form-label">Current Amount (₹)</label>
+                    <input type="number" id="goal-current" class="form-control" placeholder="0" min="0" step="100"
+                        value="0">
+                </div>
+                <div class="form-group">
+                    <label for="goal-deadline" class="form-label">Target Date</label>
+                    <input type="date" id="goal-deadline" class="form-control" required>
+                </div>
+                <div class="flex gap-2">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Save Goal</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeGoalModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/goals.js"></script>
+</body>
+
+</html>
