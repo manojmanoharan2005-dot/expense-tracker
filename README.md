@@ -1,314 +1,263 @@
-# 💰 Trackify - Smart Expense & Budget Tracker
+# 💰 Trackify - Smart Expense Tracker
 
-A complete full-stack web application for tracking expenses and managing budgets with beautiful UI, charts, and analytics.
+A modern, full-stack expense tracking application with advanced features like savings goals, budget management, and insightful analytics.
 
-## 🚀 Features
+![Trackify](https://img.shields.io/badge/Version-1.0.0-blue)
+![Node.js](https://img.shields.io/badge/Node.js-18+-green)
+![MongoDB](https://img.shields.io/badge/MongoDB-6+-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
-### Authentication
-- ✅ User signup with password hashing (bcrypt)
-- ✅ User login with JWT token
-- ✅ Protected routes
-- ✅ Logout functionality
+## ✨ Features
 
-### Expense Management
-- ✅ Add new expenses
-- ✅ Edit existing expenses
-- ✅ Delete expenses
-- ✅ Category-based organization (Food, Transport, Shopping, etc.)
-- ✅ Filter by category and date
-- ✅ Add notes to expenses
+### 📊 **Expense Tracking**
+- Add, edit, and delete expenses
+- Categorize expenses (Food, Transport, Shopping, etc.)
+- Date-based filtering
+- Notes and descriptions
 
-### Budget Management
-- ✅ Set monthly budget
-- ✅ View remaining budget
-- ✅ Budget alerts (80% and 100% warnings)
-- ✅ Visual budget progress bar
+### 🎯 **Savings Goals** (Unique Feature!)
+- Create multiple savings goals
+- Visual progress tracking with progress bars
+- Category-based goals (Emergency Fund, Vacation, Education, etc.)
+- Quick contributions
+- Deadline tracking with countdown
+- Auto-completion celebration
 
-### Dashboard & Analytics
-- ✅ Total spent this month
-- ✅ Category breakdown (Pie chart)
-- ✅ Monthly spending trend (Line chart)
-- ✅ Recent transactions list
-- ✅ Compare with previous month
-- ✅ Average daily spending
-- ✅ Top spending category
+### 💰 **Budget Management**
+- Set monthly budgets
+- Real-time budget tracking
+- Alerts when approaching/exceeding budget
+- Budget vs actual spending comparison
 
-### UI/UX
-- ✅ Modern dark mode design
-- ✅ Light mode toggle
-- ✅ Responsive layout
-- ✅ Smooth animations
-- ✅ Glassmorphism effects
-- ✅ Beautiful charts (Chart.js)
+### 📈 **Analytics & Insights**
+- Today's expenses tracking
+- Monthly spending overview
+- Overall lifetime total
+- Average daily spending
+- Spending by category (pie chart)
+- Monthly trend analysis (line chart)
+- Category breakdown (bar chart)
 
-## 🛠️ Tech Stack
+### 🎨 **Modern UI/UX**
+- Clean, minimal design
+- Light/Dark mode toggle
+- Responsive layout (mobile-friendly)
+- Smooth animations
+- Color-coded statistics
+- Interactive charts (Chart.js)
 
-**Frontend:**
-- HTML5
-- CSS3 (Vanilla CSS with modern design)
-- JavaScript (ES6+)
-- Chart.js for data visualization
+## 🚀 Tech Stack
 
-**Backend:**
-- Node.js
-- Express.js
-- MongoDB with Mongoose
-- JWT for authentication
-- bcryptjs for password hashing
+### **Backend**
+- **Node.js** - Runtime environment
+- **Express.js** - Web framework
+- **MongoDB** - Database
+- **Mongoose** - ODM
+- **JWT** - Authentication
+- **bcryptjs** - Password hashing
 
-## 📋 Prerequisites
+### **Frontend**
+- **Vanilla JavaScript** - No framework overhead
+- **HTML5** - Semantic markup
+- **CSS3** - Modern styling
+- **Chart.js** - Data visualization
 
-Before running this project, make sure you have:
+## 📦 Installation
 
-- Node.js (v14 or higher)
-- MongoDB installed locally OR MongoDB Atlas account
-- npm or yarn package manager
+### Prerequisites
+- Node.js (v18 or higher)
+- MongoDB (local or Atlas)
+- Git
 
-## 🔧 Installation & Setup
+### Steps
 
-### 1. Clone or Navigate to Project Directory
-
+1. **Clone the repository**
 ```bash
-cd d:\expsensetracker\trackify
+git clone https://github.com/manojmanoharan2005-dot/expense-tracker.git
+cd expense-tracker
 ```
 
-### 2. Install Dependencies
-
+2. **Install dependencies**
 ```bash
 npm install
 ```
 
-This will install all required packages:
-- express
-- mongoose
-- bcryptjs
-- jsonwebtoken
-- dotenv
-- cors
-- nodemon (dev dependency)
+3. **Set up environment variables**
 
-### 3. Configure Environment Variables
-
-The `.env` file is already created. Update it with your settings:
+Create a `.env` file in the root directory:
 
 ```env
-# MongoDB Connection String
+# MongoDB Connection
 MONGO_URI=mongodb://localhost:27017/trackify
-# OR use MongoDB Atlas:
-# MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/trackify?retryWrites=true&w=majority
+# Or use MongoDB Atlas:
+# MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/trackify
 
-# JWT Secret Key (Change this to a random string)
+# JWT Secret
 JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
 
 # Server Port
-PORT=5000
+PORT=3000
 ```
 
-**Important:** Change the `JWT_SECRET` to a secure random string in production!
+4. **Start MongoDB** (if using local)
+```bash
+mongod
+```
 
-### 4. Setup MongoDB
+5. **Run the application**
 
-**Option A: Local MongoDB**
-- Make sure MongoDB is installed and running on your system
-- The default connection string `mongodb://localhost:27017/trackify` will work
-
-**Option B: MongoDB Atlas (Cloud)**
-1. Create a free account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-2. Create a new cluster
-3. Get your connection string
-4. Replace `MONGO_URI` in `.env` with your Atlas connection string
-
-### 5. Start the Server
-
-**Development mode (with auto-restart):**
+Development mode:
 ```bash
 npm run dev
 ```
 
-**Production mode:**
+Production mode:
 ```bash
 npm start
 ```
 
-### 6. Access the Application
-
-Open your browser and navigate to:
+6. **Open in browser**
 ```
-http://localhost:5000
+http://localhost:3000
 ```
 
-## 📱 Usage Guide
-
-### First Time Setup
-
-1. **Sign Up**
-   - Click "Sign Up" button
-   - Enter your name, email, and password (min 6 characters)
-   - You'll be automatically logged in
-
-2. **Set Your Budget**
-   - Go to "Budget" section in the sidebar
-   - Enter your monthly budget amount
-   - Click "Update Budget"
-
-3. **Add Expenses**
-   - Click "+ Add Expense" button
-   - Fill in the details:
-     - Title (e.g., "Grocery Shopping")
-     - Amount (in ₹)
-     - Category
-     - Date
-     - Notes (optional)
-   - Click "Save Expense"
-
-4. **View Analytics**
-   - Dashboard shows your spending overview
-   - View charts for category breakdown
-   - See monthly trends
-   - Compare with previous month
-
-### Features Walkthrough
-
-**Dashboard Overview:**
-- Total spent this month
-- Monthly budget status
-- Average daily spending
-- Total transactions count
-- Category pie chart
-- Monthly trend line chart
-- Recent 5 transactions
-
-**Expenses Page:**
-- View all expenses in a table
-- Filter by category
-- Filter by month
-- Edit or delete any expense
-
-**Budget Page:**
-- Set/update monthly budget
-- View budget overview
-- See spending progress bar
-- Get alerts when approaching limit
-
-**Analytics Page:**
-- Detailed spending analysis
-- Month-over-month comparison
-- Top spending category
-- Category breakdown chart
-
-## 🎨 UI Features
-
-- **Dark Mode:** Default beautiful dark theme
-- **Light Mode:** Toggle to light mode anytime
-- **Responsive:** Works on desktop, tablet, and mobile
-- **Animations:** Smooth transitions and hover effects
-- **Modern Design:** Glassmorphism, gradients, and shadows
-
-## 🔒 Security Features
-
-- Passwords are hashed using bcrypt
-- JWT tokens for secure authentication
-- Protected API routes
-- Input validation on both frontend and backend
-- Environment variables for sensitive data
-
-## 📊 API Endpoints
-
-### Authentication Routes
-```
-POST /api/auth/signup    - Register new user
-POST /api/auth/login     - Login user
-```
-
-### Expense Routes (Protected)
-```
-GET    /api/expenses           - Get all user expenses
-POST   /api/expenses           - Create new expense
-PUT    /api/expenses/:id       - Update expense
-DELETE /api/expenses/:id       - Delete expense
-PUT    /api/expenses/budget/update - Update monthly budget
-```
-
-## 🗂️ Project Structure
+## 📁 Project Structure
 
 ```
 trackify/
-│
-├── client/                    # Frontend files
-│   ├── index.html            # Landing page
-│   ├── login.html            # Login page
-│   ├── signup.html           # Signup page
-│   ├── dashboard.html        # Main dashboard
+├── client/                 # Frontend files
 │   ├── css/
-│   │   └── style.css         # All styles
-│   └── js/
-│       ├── main.js           # Utility functions
-│       ├── auth.js           # Authentication logic
-│       └── dashboard.js      # Dashboard functionality
-│
-├── server/                    # Backend files
-│   ├── server.js             # Main server file
+│   │   └── style.css      # All styles
+│   ├── js/
+│   │   ├── main.js        # Utilities & helpers
+│   │   ├── auth.js        # Authentication logic
+│   │   ├── dashboard.js   # Dashboard functionality
+│   │   └── goals.js       # Goals feature
+│   ├── login.html         # Login page
+│   ├── signup.html        # Signup page
+│   └── dashboard.html     # Main dashboard
+├── server/                # Backend files
 │   ├── config/
-│   │   └── db.js             # Database connection
+│   │   └── db.js          # Database connection
+│   ├── middleware/
+│   │   └── authMiddleware.js  # JWT authentication
 │   ├── models/
-│   │   ├── User.js           # User model
-│   │   └── Expense.js        # Expense model
+│   │   ├── User.js        # User model
+│   │   ├── Expense.js     # Expense model
+│   │   └── Goal.js        # Goal model
 │   ├── routes/
-│   │   ├── authRoutes.js     # Auth endpoints
-│   │   └── expenseRoutes.js  # Expense endpoints
-│   └── middleware/
-│       └── authMiddleware.js # JWT verification
-│
-├── package.json              # Dependencies
-└── .env                      # Environment variables
+│   │   ├── authRoutes.js  # Auth endpoints
+│   │   ├── expenseRoutes.js  # Expense endpoints
+│   │   └── goalRoutes.js  # Goal endpoints
+│   └── server.js          # Express server
+├── .env                   # Environment variables
+├── .gitignore            # Git ignore file
+├── package.json          # Dependencies
+└── README.md             # This file
 ```
 
-## 🐛 Troubleshooting
+## 🔐 API Endpoints
 
-**MongoDB Connection Error:**
-- Make sure MongoDB is running
-- Check your connection string in `.env`
-- For Atlas, ensure your IP is whitelisted
+### **Authentication**
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login user
 
-**Port Already in Use:**
-- Change the `PORT` in `.env` file
-- Or stop the process using port 5000
+### **Expenses**
+- `GET /api/expenses` - Get all expenses
+- `POST /api/expenses` - Create expense
+- `PUT /api/expenses/:id` - Update expense
+- `DELETE /api/expenses/:id` - Delete expense
+- `PUT /api/expenses/budget/update` - Update budget
 
-**JWT Token Errors:**
-- Clear browser localStorage
-- Log out and log in again
+### **Goals**
+- `GET /api/goals` - Get all goals
+- `POST /api/goals` - Create goal
+- `PUT /api/goals/:id` - Update goal
+- `DELETE /api/goals/:id` - Delete goal
+- `PUT /api/goals/:id/contribute` - Add money to goal
 
-**Charts Not Showing:**
-- Make sure Chart.js CDN is loading
-- Check browser console for errors
+## 🎯 Usage
 
-## 🚀 Deployment
+### **1. Sign Up**
+- Navigate to `/signup`
+- Enter name, email, and password
+- Click "Create Account"
 
-### Backend Deployment (Render/Heroku)
-1. Push code to GitHub
-2. Connect to Render/Heroku
-3. Set environment variables
-4. Deploy
+### **2. Login**
+- Navigate to `/login`
+- Enter credentials
+- Access dashboard
 
-### Frontend
-- The frontend is served by the Express server
-- No separate deployment needed
+### **3. Add Expense**
+- Click "+ Add Expense"
+- Fill in details (title, amount, category, date)
+- Save expense
+
+### **4. Create Savings Goal**
+- Go to "Goals" section
+- Click "+ Add Goal"
+- Set name, target amount, deadline
+- Track progress visually
+
+### **5. Set Budget**
+- Go to "Budget" section
+- Enter monthly budget amount
+- Monitor spending vs budget
+
+## 📊 Dashboard Overview
+
+The dashboard displays:
+- **Today's Expenses** - Current day spending
+- **This Month** - Monthly total with trend
+- **Overall Total** - All-time expenses
+- **Monthly Budget** - Budget tracking
+- **Average Daily** - Daily spending average
+- **Transactions** - Transaction count
+
+## 🔮 Future Features
+
+- [ ] Recurring expenses tracker
+- [ ] Category budget limits
+- [ ] Spending heatmap calendar
+- [ ] Export reports (CSV/PDF)
+- [ ] Split expenses with friends
+- [ ] Custom expense tags
+- [ ] Bill reminders
+- [ ] Email notifications
+- [ ] Mobile app (React Native)
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## 📝 License
 
-This project is open source and available for educational purposes.
+This project is licensed under the MIT License.
 
 ## 👨‍💻 Author
 
-Built with ❤️ as a full-stack expense tracker demonstration.
+**Manoj Kumar**
+- GitHub: [@manojmanoharan2005-dot](https://github.com/manojmanoharan2005-dot)
 
 ## 🙏 Acknowledgments
 
 - Chart.js for beautiful charts
-- Google Fonts (Inter) for typography
 - MongoDB for database
 - Express.js for backend framework
+- All contributors and users
+
+## 📧 Contact
+
+For questions or support, please open an issue on GitHub.
 
 ---
 
-**Happy Expense Tracking! 💰📊**
+**Made with ❤️ by Manoj Kumar**
+
+⭐ Star this repo if you find it helpful!
